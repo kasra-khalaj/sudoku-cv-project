@@ -17,7 +17,8 @@ from typing import List, Union, Tuple, Optional
 
 def is_valid_board(board: Union[List[List[int]], np.ndarray]) -> bool:
     """
-    Checks if the initial board configuration is valid (no conflicting non-zero numbers).
+    Checks if the initial board configuration is valid (no conflicting non-zero numbers
+    and all numbers in the valid range 0-9).
     """
     rows = [set() for _ in range(9)]
     cols = [set() for _ in range(9)]
@@ -26,6 +27,8 @@ def is_valid_board(board: Union[List[List[int]], np.ndarray]) -> bool:
     for r in range(9):
         for c in range(9):
             val = board[r][c]
+            if val < 0 or val > 9:
+                return False
             if val != 0:
                 block_idx = (r // 3) * 3 + (c // 3)
                 if val in rows[r] or val in cols[c] or val in blocks[block_idx]:

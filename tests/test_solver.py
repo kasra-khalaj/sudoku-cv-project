@@ -64,66 +64,26 @@ def test_initially_invalid_puzzle():
     assert success is False
     assert solved is None
 
+def test_out_of_range_number():
+    board = [
+        [5, 3, 0, 0, 7, 0, 0, 0, 10], # 10 is out of range
+        [6, 0, 0, 1, 9, 5, 0, 0, 0],
+        [0, 9, 8, 0, 0, 0, 0, 6, 0],
+        [8, 0, 0, 0, 6, 0, 0, 0, 3],
+        [4, 0, 0, 8, 0, 3, 0, 0, 1],
+        [7, 0, 0, 0, 2, 0, 0, 0, 6],
+        [0, 6, 0, 0, 0, 0, 2, 8, 0],
+        [0, 0, 0, 4, 1, 9, 0, 0, 5],
+        [0, 0, 0, 0, 8, 0, 0, 7, 9]
+    ]
+
+    success, solved = solve_sudoku(board)
+    assert success is False
+    assert solved is None
+
+
 def test_unsolvable_puzzle():
     # Valid initial state, but unsolvable configuration.
-    # We can create an unsolvable puzzle by removing a clue needed for unique solution
-    # and creating a contradiction or by blocking all possibilities for a cell.
-    # An easy unsolvable puzzle is to box in a cell so no valid number can go in.
-    board = [
-        [5, 1, 6, 8, 4, 9, 7, 3, 2],
-        [3, 0, 7, 6, 0, 5, 0, 0, 0],
-        [8, 0, 9, 7, 0, 0, 0, 6, 5],
-        [1, 3, 5, 0, 6, 0, 9, 0, 7],
-        [4, 7, 2, 5, 9, 1, 0, 0, 6],
-        [9, 6, 8, 3, 7, 0, 0, 5, 0],
-        [2, 5, 3, 1, 8, 6, 0, 7, 4],
-        [6, 8, 4, 2, 0, 7, 5, 0, 0],
-        [7, 9, 1, 0, 5, 0, 6, 0, 8]
-    ]
-
-    # We can force a contradiction to make it unsolvable
-    # In row 8, col 4 (0-indexed), there's a 0. Let's make it such that no number can go there.
-    # Actually, a simpler unsolvable case is one that requires backtracking but ultimately fails.
-    # Let's take a board that fails due to constraints.
-    unsolvable_board = [
-        [5, 1, 6, 8, 4, 9, 7, 3, 2],
-        [3, 2, 7, 6, 1, 5, 8, 4, 9],
-        [8, 4, 9, 7, 2, 3, 1, 6, 5],
-        [1, 3, 5, 2, 6, 4, 9, 8, 7],
-        [4, 7, 2, 5, 9, 1, 3, 0, 6],  # Missing a couple
-        [9, 6, 8, 3, 7, 8, 2, 5, 1],  # 8 is duplicated here in row 5 (invalid)
-        [2, 5, 3, 1, 8, 6, 0, 7, 4],
-        [6, 8, 4, 2, 3, 7, 5, 1, 0],
-        [7, 9, 1, 4, 5, 0, 6, 2, 8]
-    ]
-    # The above is invalid. Let's construct a valid-but-unsolvable board.
-
-    board = [
-        [1, 2, 3, 4, 5, 6, 7, 8, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 1], # Cannot put 9 in corner because 1 is taken in row, etc.
-        [0, 0, 0, 0, 0, 0, 0, 0, 2],
-        [0, 0, 0, 0, 0, 0, 0, 0, 3],
-        [0, 0, 0, 0, 0, 0, 0, 0, 4],
-        [0, 0, 0, 0, 0, 0, 0, 0, 5],
-        [0, 0, 0, 0, 0, 0, 0, 0, 6],
-        [0, 0, 0, 0, 0, 0, 0, 0, 7],
-        [0, 0, 0, 0, 0, 0, 0, 0, 8]
-    ]
-    # The top-right corner is (0,8). It's empty. The top row has 1-8. So it must be 9.
-    # The rightmost col has 1-8 below it. So the top-right corner must be 9.
-    # However, if we put 9 in the rightmost col, what goes in the rest? This is actually solvable possibly.
-    # Let's use a known unsolvable configuration by setting a trap.
-    board2 = [
-        [5, 1, 6, 8, 4, 9, 7, 3, 2],
-        [3, 0, 7, 6, 0, 5, 0, 0, 0],
-        [8, 0, 9, 7, 0, 0, 0, 6, 5],
-        [1, 3, 5, 0, 6, 0, 9, 0, 7],
-        [4, 7, 2, 5, 9, 1, 0, 0, 6],
-        [9, 6, 8, 3, 7, 0, 0, 5, 0],
-        [2, 5, 3, 1, 8, 6, 0, 7, 4],
-        [6, 8, 4, 2, 0, 7, 5, 0, 0],
-        [7, 9, 1, 0, 5, 0, 6, 0, 8]
-    ]
     # Let's explicitly trap a cell:
     board_trap = [
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -150,7 +110,6 @@ def test_unsolvable_puzzle():
     board_trap[1][1] = 8
     board_trap[2][2] = 9
     # Now cell (0,0) cannot be 2,3,4 (row), 5,6,7 (col), 8,9 (block).
-    # Wait, 1 is still possible.
     board_trap[4][0] = 1 # Now 1 is in the col.
     # So (0,0) cannot be 1,2,3,4,5,6,7,8,9. It's trapped.
 
