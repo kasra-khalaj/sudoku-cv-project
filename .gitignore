@@ -1,0 +1,30 @@
+# Datasets (large, not committed as raw files)
+datasets/*
+!datasets/.gitkeep
+
+# Checkpoints (intermediate artifacts — see README Checkpoint Policy)
+checkpoints/*
+!checkpoints/.gitkeep
+
+# Model weights tracked via Git LFS instead of plain git blobs where large
+# (see .gitattributes once added)
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+.env
+.venv/
+venv/
+
+# Colab / Jupyter
+*.ipynb_checkpoints
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

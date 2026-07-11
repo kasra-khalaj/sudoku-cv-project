@@ -1,0 +1,22 @@
+# Core CV / numerics
+opencv-python
+numpy
+
+# Digit recognition model (choose one deep learning backend — TBD Phase 2)
+torch
+torchvision
+# tensorflow          # uncomment if using TF/Keras instead of PyTorch
+
+# Evaluation / plotting
+matplotlib
+scikit-learn
+
+# Sudoku solver — pure Python, no extra deps expected
+
+# UI (Bonus #3) — uncomment once toolkit is chosen in Phase 5
+# streamlit
+# gradio
+# pyqt6
+
+# Testing
+pytest
